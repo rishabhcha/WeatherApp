@@ -1,0 +1,53 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.starein.rishabh.weatherapp"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+//Dependency versions are defined in the top level build.gradle file
+dependencies {
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support.constraint:constraint-layout:$rootProject.constrainLayoutVersion"
+    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+
+    // https://github.com/ReactiveX/RxAndroid
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
+
+    // Retrofit http://square.github.io/retrofit
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.adapterVersion"
+
+    //okhttp3
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpVersion"
+
+    // GSON body parser
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    androidTestImplementation "com.android.support.test:runner:$rootProject.runnerVersion"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
+
+}
