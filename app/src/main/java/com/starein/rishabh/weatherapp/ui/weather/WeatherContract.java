@@ -1,6 +1,7 @@
 package com.starein.rishabh.weatherapp.ui.weather;
 
 import com.starein.rishabh.weatherapp.model.Forecastday;
+import com.starein.rishabh.weatherapp.model.Weather;
 import com.starein.rishabh.weatherapp.network.ApiService;
 import com.starein.rishabh.weatherapp.ui.BasePresenter;
 import com.starein.rishabh.weatherapp.ui.BaseView;
@@ -16,9 +17,9 @@ public interface WeatherContract {
 
         void hideLoading();
 
-        void setDataToRecyclerView(List<Forecastday> forecastdayArrayList);
+        void onAPISuccess(String currTemp, String cityName, List<Forecastday> forecastdayList);
 
-        void onFailureGetData(String message);
+        void onAPIFailure();
     }
 
     interface Presenter extends BasePresenter {

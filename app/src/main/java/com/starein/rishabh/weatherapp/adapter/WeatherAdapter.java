@@ -10,6 +10,9 @@ import android.widget.TextView;
 import com.starein.rishabh.weatherapp.R;
 import com.starein.rishabh.weatherapp.model.Forecastday;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherViewHolder> {
@@ -36,9 +39,22 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull WeatherViewHolder weatherViewHolder, int i) {
 
-        weatherViewHolder.dayTextView.setText(forecastdayList.get(i).getDate());
-        weatherViewHolder.tempTextView.setText(String.format("%s C", forecastdayList.get(i).getDay().getAvgtempC()));
+        weatherViewHolder.dayTextView.setText(getDayFromDate(forecastdayList.get(i).getDate()));
+        weatherViewHolder.tempTextView.setText(String.format("%s C", (int) Math.round(forecastdayList.get(i).getDay().getAvgtempC())));
 
+    }
+
+    private String getDayFromDate(String input){
+        SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = inFormat.parse(input);
+            SimpleDateFormat outFormat = new SimpleDateFormat("EEEE");
+            return outFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     @Override

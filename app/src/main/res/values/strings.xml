@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="error_message">Something went wrong at our end!</string>
+    <string name="retry">RETRY</string>
+    <string name="degree">\u00B0</string>
+    <string name="city_name">City Name</string>
+    <string name="_20">20</string>
+    <string name="day">Day</string>
 </resources>

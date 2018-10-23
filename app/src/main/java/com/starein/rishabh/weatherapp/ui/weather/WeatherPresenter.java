@@ -1,8 +1,11 @@
 package com.starein.rishabh.weatherapp.ui.weather;
 
+import com.starein.rishabh.weatherapp.model.Forecastday;
 import com.starein.rishabh.weatherapp.model.Weather;
 import com.starein.rishabh.weatherapp.network.ApiService;
 import com.starein.rishabh.weatherapp.network.NetworkCallback;
+
+import java.util.List;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -26,13 +29,16 @@ public class WeatherPresenter implements WeatherContract.Presenter{
         Disposable disposable = apiService.weatherForecast(new NetworkCallback<Weather>() {
             @Override
             public void onSuccess(Weather response) {
-                view.setDataToRecyclerView(response.getForecast().getForecastday());
+                List<Forecastday> forecastdayList = response.getForecast().getForecastday();
+                forecastdayList.remove(0);
+                view.onAPISuccess(String.valueOf((int) Math.round(response.getCurrent().getTempC())),
+                        response.getLocation().getName(), forecastdayList);
                 view.hideLoading();
             }
 
             @Override
             public void onError(Throwable e) {
-                view.onFailureGetData(e.toString());
+                view.onAPIFailure();
                 view.hideLoading();
             }
         });
