@@ -11,9 +11,9 @@ public interface ApiInterface {
 
     @GET("forecast.json")
     Observable<Weather> getForecastWeather(
-//            @Query("key") String api_key,
-//            @Query("q") String q,
-//            @Query("days") String days
+            @Query("key") String api_key,
+            @Query("q") String q,
+            @Query("days") String days
     );
 
 }

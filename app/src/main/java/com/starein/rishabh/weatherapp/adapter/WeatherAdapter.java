@@ -16,9 +16,15 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherViewHolder> {
 
     private List<Forecastday> forecastdayList;
 
-    public WeatherAdapter(List<Forecastday> forecastdayList){
+    public WeatherAdapter(){
+
+    }
+
+    public void setForecastList(List<Forecastday> forecastdayList){
         this.forecastdayList = forecastdayList;
     }
+
+
 
     @NonNull
     @Override

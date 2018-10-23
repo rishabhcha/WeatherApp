@@ -2,6 +2,7 @@ package com.starein.rishabh.weatherapp.network;
 
 
 import com.starein.rishabh.weatherapp.model.Weather;
+import com.starein.rishabh.weatherapp.util.Constants;
 
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -17,7 +18,7 @@ public class ApiService {
     }
 
     public Disposable weatherForecast(NetworkCallback<Weather> callback) {
-        return apiInterface.getForecastWeather()
+        return apiInterface.getForecastWeather(Constants.API_KEY, "Delhi", Constants.DAYS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(
