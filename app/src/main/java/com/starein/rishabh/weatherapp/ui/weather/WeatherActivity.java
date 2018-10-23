@@ -1,10 +1,15 @@
 package com.starein.rishabh.weatherapp.ui.weather;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,6 +23,7 @@ import com.starein.rishabh.weatherapp.deps.provider.ApplicationProvider;
 import com.starein.rishabh.weatherapp.model.Forecastday;
 import com.starein.rishabh.weatherapp.model.Weather;
 import com.starein.rishabh.weatherapp.network.ApiService;
+import com.starein.rishabh.weatherapp.util.PermissionsDialogFragment;
 
 import java.util.List;
 
@@ -25,7 +31,8 @@ import javax.inject.Inject;
 
 import static java.security.AccessController.getContext;
 
-public class WeatherActivity extends AppCompatActivity implements WeatherContract.View{
+public class WeatherActivity extends AppCompatActivity implements WeatherContract.View,
+        PermissionsDialogFragment.PermissionsGrantedCallback {
 
     @Inject
     ApiService service;
@@ -70,13 +77,22 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.loadForecastWeather(service);
+        if (isPermissionGranted()){
+            showForecastWeather();
+        }else {
+            PermissionsDialogFragment.newInstance().show(getSupportFragmentManager(), PermissionsDialogFragment.class.getName());
+        }
     }
 
     @Override
     protected void onDestroy() {
         presenter.stop();
         super.onDestroy();
+    }
+
+    @Override
+    public void showForecastWeather() {
+        presenter.loadForecastWeather(service);
     }
 
     @Override
@@ -119,5 +135,9 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         setContentView(R.layout.activity_weather);
         initViews();
         presenter.loadForecastWeather(service);
+    }
+
+    private boolean isPermissionGranted() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 }

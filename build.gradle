@@ -48,6 +48,7 @@ ext {
     okhttpVersion = '3.10.0'
     gsonVersion = '2.8.2'
     daggerVersion = '2.5'
+    playserviceVersion = '16.0.0'
 
 }
 
