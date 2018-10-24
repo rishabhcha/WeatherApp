@@ -32,6 +32,8 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constrainLayoutVersion"
     implementation "com.android.support:design:$rootProject.supportLibraryVersion"
     implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-media-compat:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
 
     // https://github.com/ReactiveX/RxAndroid
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
