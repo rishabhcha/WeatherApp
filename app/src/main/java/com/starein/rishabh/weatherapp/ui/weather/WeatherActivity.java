@@ -3,6 +3,7 @@ package com.starein.rishabh.weatherapp.ui.weather;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import javax.inject.Inject;
 
 import static java.security.AccessController.getContext;
 
+
 public class WeatherActivity extends AppCompatActivity implements WeatherContract.View,
         PermissionsDialogFragment.PermissionsGrantedCallback {
 
@@ -43,6 +45,10 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     private ProgressBar progressBar;
     private WeatherAdapter weatherAdapter;
     private TextView currTempTextView, cityTextView;
+
+    //Maintains a counter of active tasks. When the counter is zero, the associated resource is considered idle.
+    CountingIdlingResource espressoTestIdlingResource = new CountingIdlingResource("Network_Call");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
     }
 
+    //initialize all views
     private void initViews() {
 
         weatherRecyclerView = findViewById(R.id.weatherRecyclerView);
@@ -77,7 +84,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     @Override
     protected void onResume() {
         super.onResume();
-        if (isPermissionGranted()){
+        if (isPermissionGranted()){//If location permission is granted show forecast
             showForecastWeather();
         }else {
             PermissionsDialogFragment.newInstance().show(getSupportFragmentManager(), PermissionsDialogFragment.class.getName());
@@ -93,6 +100,7 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
     @Override
     public void showForecastWeather() {
         presenter.loadForecastWeather(service);
+        espressoTestIdlingResource.increment();
     }
 
     @Override
@@ -119,11 +127,14 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
         Animation bottomUp = AnimationUtils.loadAnimation(WeatherActivity.this, R.anim.bottom_up);
         weatherRecyclerView.startAnimation(bottomUp);
         weatherRecyclerView.setVisibility(View.VISIBLE);
+
+        espressoTestIdlingResource.decrement();
     }
 
     @Override
     public void onAPIFailure() {
         setContentView(R.layout.activity_weather_error);
+        espressoTestIdlingResource.decrement();
     }
 
     @Override
@@ -131,12 +142,19 @@ public class WeatherActivity extends AppCompatActivity implements WeatherContrac
 
     }
 
+    //on click of retry button
     public void retryLoadingWeather(View view) {
         setContentView(R.layout.activity_weather);
         initViews();
-        presenter.loadForecastWeather(service);
+        showForecastWeather();
     }
 
+    //return counter of active task
+    public CountingIdlingResource getEspressoIdlingResourceForMainActivity() {
+        return espressoTestIdlingResource;
+    }
+
+    //check for location permission
     private boolean isPermissionGranted() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
